@@ -1,0 +1,31 @@
+# https://kubernetes.io/docs/concepts/services-networking/ingress/
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-dev-onlymaswahyu
+  namespace: dev-onlymaswahyu
+  # https://kubernetes.github.io/ingress-nginx/examples/rewrite/
+  annotations:
+    #   # nginx.ingress.kubernetes.io/rewrite-target: /$1
+    # cert-manager.io/issuer: letsencrypt-nginx
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "60000"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "60000"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "60000"
+spec:
+  # tls:
+  #   - hosts:
+  #     - k8-member.zahir.dev
+  #     secretName: letsencrypt-nginx
+  rules:
+    - host: onlymaswahyu.zahir.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: svc-onlymaswahyu
+                port:
+                  number: 80
+
+  ingressClassName: nginx
